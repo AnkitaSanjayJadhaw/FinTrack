@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack — Expense Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div class="auth-screen" id="loginScreen">
+        <div class="auth-card">
+            <div class="auth-logo">F</div>
+            <h2>Welcome Back</h2>
+            <p class="auth-sub">Log in to your FinTrack account</p>
+            <form onsubmit="return loginUser(event)">
+                <div class="fg"><label>Email</label><input class="fi" type="email" id="loginEmail"
+                        placeholder="you@example.com" required></div>
+                <div class="fg"><label>Password</label>
+                    <div class="pass-wrapper">
+                        <input class="fi" type="password" id="loginPass" placeholder="Enter your password" required>
+                        <button type="button" class="pass-toggle" onclick="togglePass('loginPass',this)"><i
+                                class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="sub-btn">Login</button>
+            </form>
+            <p class="auth-switch">Don't have an account? <a onclick="showScreen('register')">Register</a></p>
+            <a class="auth-back" onclick="backToDemo()"><i class="fas fa-arrow-left"></i> Back to Demo</a>
+        </div>
+    </div>
+
+    <!-- REGISTER SCREEN -->
+    <div class="auth-screen" id="registerScreen">
+        <div class="auth-card">
+            <div class="auth-logo">F</div>
+            <h2>Create Account</h2>
+            <p class="auth-sub">Start tracking your finances today</p>
+            <form onsubmit="return registerUser(event)">
+                <div class="frow">
+                    <div class="fg"><label>First Name</label><input class="fi" id="regFirst" placeholder="Ankita"
+                            required></div>
+                    <div class="fg"><label>Last Name</label><input class="fi" id="regLast" placeholder="Sanjay"
+                            required></div>
+                </div>
+                <div class="fg"><label>Email</label><input class="fi" type="email" id="regEmail"
+                        placeholder="you@example.com" required></div>
+                <div class="fg"><label>Password</label>
+                    <div class="pass-wrapper">
+                        <input class="fi" type="password" id="regPass" placeholder="Min 8 characters" minlength="8"
+                            required>
+                        <button type="button" class="pass-toggle" onclick="togglePass('regPass',this)"><i
+                                class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="fg"><label>Currency</label>
+                    <select class="fs" id="regCurrency">
+                        <option value="$" selected>USD ($)</option>
+                        <option value="€">EUR (€)</option>
+                        <option value="£">GBP (£)</option>
+                        <option value="₹">INR (₹)</option>
+                        <option value="Rs">PKR (Rs)</option>
+                        <option value="AU$">AUD (AU$)</option>
+                        <option value="¥">JPY (¥)</option>
+                    </select>
+                </div>
+                <button type="submit" class="sub-btn">Create Account</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a onclick="showScreen('login')">Login</a></p>
+            <a class="auth-back" onclick="backToDemo()"><i class="fas fa-arrow-left"></i> Back to Demo</a>
+        </div>
+    </div>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOv"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-icon">F</div>
+            <div>
+                <h2>FinTrack</h2><span>Money Manager</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i>Dashboard</a>
+            <a class="nav-item" data-page="transactions"><i class="fas fa-exchange-alt"></i>Transactions</a>
+            <a class="nav-item" data-page="analytics"><i class="fas fa-chart-pie"></i>Analytics</a>
+            <div class="nav-label">Manage</div>
+            <a class="nav-item" data-page="budgets"><i class="fas fa-wallet"></i>Budgets</a>
+            <a class="nav-item" data-page="goals"><i class="fas fa-bullseye"></i>Goals</a>
+            <a class="nav-item" data-page="categories"><i class="fas fa-tags"></i>Categories</a>
+            <div class="nav-label">Account</div>
+            <a class="nav-item" data-page="settings"><i class="fas fa-cog"></i>Settings</a>
+            <a class="nav-item" data-page="help"><i class="fas fa-question-circle"></i>Help</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar" id="sidebarAvatar">AS</div>
+                <div class="user-info">
+                    <div class="name" id="sidebarName">Ankita Sanjay</div>
+                    <div class="role" id="sidebarRole">Demo Mode</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div>
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageDesc">Welcome back! Here's your financial overview.</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div id="demoAuthBtns">
+                    <button class="auth-top-btn login-btn" onclick="showScreen('login')"><i
+                            class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="auth-top-btn register-btn" onclick="showScreen('register')"><i
+                            class="fas fa-user-plus"></i> Register</button>
+                </div>
+                <div id="loggedInInfo" style="display:none">
+                    <div class="topbar-user">
+                        <div class="tu-avatar" id="topbarAvatar">AS</div>
+                        <div>
+                            <div class="tu-name" id="topbarName">Ankita Sanjay</div>
+                            <div class="tu-role">My Account</div>
+                        </div>
+                    </div>
+                    <button class="auth-top-btn logout-btn" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i>
+                        Logout</button>
+                </div>
+                <div class="search-box"><i class="fas fa-search"></i><input type="text"
+                        placeholder="Search transactions..." id="globalSearch"></div>
+                <div class="notif-wrapper">
+                    <button class="icon-btn" id="notifBell" onclick="toggleNotifDropdown()"><i
+                            class="far fa-bell"></i><span class="badge" id="notifBadge">0</span></button>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-hdr">
+                            <h4>Notifications</h4>
+                            <button class="notif-clear" onclick="clearNotifications()">
+                                Clear All
+                            </button>
+                        </div>
+                        <div class="notif-list" id="notifList"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="demo-banner" id="demoBanner">
+            <div class="demo-left"><i class="fas fa-eye"></i><span>You are viewing the demo dashboard. Register or login
+                    to track your own expenses.</span></div>
+            <div class="demo-right"><button class="auth-top-btn login-btn" onclick="showScreen('login')"><i
+                        class="fas fa-sign-in-alt"></i> Login</button><button class="auth-top-btn register-btn"
+                    onclick="showScreen('register')"><i class="fas fa-user-plus"></i> Register</button></div>
+        </div>
+
+        <div class="content">
+            <!-- DASHBOARD -->
+            <section class="page active" data-page="dashboard">
+                <div class="summary-grid" id="dashSummary"></div>
+                <div class="charts-grid">
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>Monthly Overview</h3>
+                            <div class="filter-group"><button class="filter-btn active"
+                                    onclick="updateBarChart('week',this)">Week</button><button class="filter-btn"
+                                    onclick="updateBarChart('month',this)">Month</button><button class="filter-btn"
+                                    onclick="updateBarChart('year',this)">Year</button></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-wrap"><canvas id="dashBar"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>By Category</h3><a class="view-all">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-wrap"
+                                style="height:220px;display:flex;align-items:center;justify-content:center"><canvas
+                                    id="dashDoughnut"></canvas></div>
+                            <div id="dashCatList" style="margin-top:14px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-grid">
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>Recent Transactions</h3><a class="view-all" onclick="navigateTo('transactions')">View
+                                All</a>
+                        </div>
+                        <div class="card-body">
+                            <div id="dashTxnList"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>Spending Breakdown</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="dashBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANSACTIONS -->
+            <section class="page" data-page="transactions">
+                <div class="txn-summary-row" id="txnSummaryRow"></div>
+                <div class="txn-toolbar">
+                    <div class="search-box" style="min-width:240px"><i class="fas fa-search"></i><input type="text"
+                            placeholder="Search transactions..." id="txnSearch" oninput="renderTransactionsPage()">
+                    </div>
+                    <div class="txn-filters"><button class="tf active"
+                            onclick="setTxnFilter('all',this)">All</button><button class="tf"
+                            onclick="setTxnFilter('income',this)">Income</button><button class="tf"
+                            onclick="setTxnFilter('expense',this)">Expense</button></div>
+                    <select class="fs" style="width:160px;padding:8px 12px" id="txnCatFilter"
+                        onchange="renderTransactionsPage()">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+                <div class="txn-count" id="txnCount"></div>
+                <div class="card">
+                    <div class="card-body" id="txnFullList"></div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS -->
+            <section class="page" data-page="analytics">
+                <div class="analytics-stats" id="analyticsStats"></div>
+                <div class="analytics-charts">
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>Daily Spending Trend</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-wrap"><canvas id="analyticsLine"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-hdr">
+                            <h3>Category Split</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-wrap" style="height:240px"><canvas id="analyticsDoughnut"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-hdr">
+                        <h3>Top Expenses</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="top-expenses-list" id="topExpenses"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGETS -->
+            <section class="page" data-page="budgets">
+                <div class="budget-overview" id="budgetOverview"></div>
+                <div class="card">
+                    <div class="card-hdr">
+                        <h3>Category Budgets</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="budget-list" id="budgetList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GOALS -->
+            <section class="page" data-page="goals">
+                <div class="goals-header">
+                    <div>
+                        <h3 style="font-size:16px;font-weight:600">Savings Goals</h3>
+                        <p style="font-size:13px;color:var(--text-sec)">Track your financial goals progress</p>
+                    </div><button class="btn-primary" id="newGoalBtn" onclick="openGoalModal()"><i
+                            class="fas fa-plus"></i>New Goal</button>
+                </div>
+                <div class="goals-grid" id="goalsGrid"></div>
+            </section>
+
+            <!-- CATEGORIES -->
+            <section class="page" data-page="categories">
+                <div class="goals-header">
+                    <div>
+                        <h3 style="font-size:16px;font-weight:600">Expense Categories</h3>
+                        <p style="font-size:13px;color:var(--text-sec)">Manage your spending categories</p>
+                    </div>
+                    <button class="btn-primary" onclick="openCatModal('expense')"><i class="fas fa-plus"></i>Add
+                        Category</button>
+                </div>
+                <div class="cat-grid" id="catGrid"></div>
+                <div class="goals-header" style="margin-top:28px">
+                    <div>
+                        <h3 style="font-size:16px;font-weight:600">Income Sources</h3>
+                        <p style="font-size:13px;color:var(--text-sec)">Manage your income categories</p>
+                    </div>
+                    <button class="btn-primary" onclick="openCatModal('income')"><i class="fas fa-plus"></i>Add
+                        Source</button>
+                </div>
+                <div class="cat-grid" id="incCatGrid"></div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section class="page" data-page="settings">
+                <div class="settings-section" id="settingsProfile">
+                    <div class="ss-hdr">Profile</div>
+                    <div class="ss-body">
+                        <div class="ss-row">
+                            <div>
+                                <div class="ss-label">Display Name</div>
+                                <div class="ss-desc">Shown in the sidebar</div>
+                            </div><input class="fi" style="width:200px;text-align:right" id="settingsName"
+                                value="Ankita Sanjay" onchange="saveName()">
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section" id="settingsPassword" style="display:none">
+                    <div class="ss-hdr">Security</div>
+                    <div class="ss-body">
+                        <div class="ss-row">
+                            <div>
+                                <div class="ss-label">Change Password</div>
+                                <div class="ss-desc">Min 8 characters</div>
+                            </div>
+                            <div class="password-row">
+                                <div class="pass-wrapper" style="flex:1"><input class="fi" type="password" id="newPass"
+                                        placeholder="New password"><button type="button" class="pass-toggle"
+                                        onclick="togglePass('newPass',this)"><i class="fas fa-eye"></i></button></div>
+                                <button class="auth-top-btn login-btn" onclick="changePassword()"
+                                    style="white-space:nowrap">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="ss-hdr">Preferences</div>
+                    <div class="ss-body">
+                        <div class="ss-row">
+                            <div>
+                                <div class="ss-label">Currency</div>
+                                <div class="ss-desc">Used for display purposes</div>
+                            </div><select class="fs" style="width:140px" id="settingsCurrency"
+                                onchange="saveCurrency()">
+                                <option value="$">USD ($)</option>
+                                <option value="€">EUR (€)</option>
+                                <option value="£">GBP (£)</option>
+                                <option value="₹">INR (₹)</option>
+                                <option value="Rs">PKR (Rs)</option>
+                                <option value="AU$">AUD (AU$)</option>
+                                <option value="¥">JPY (¥)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section" id="settingsData">
+                    <div class="ss-hdr">Data</div>
+                    <div class="ss-body">
+                        <div class="ss-row">
+                            <div>
+                                <div class="ss-label">Reset All Data</div>
+                                <div class="ss-desc">Delete all your transactions, budgets, and goals permanently</div>
+                            </div><button class="btn-danger" id="resetBtn" onclick="resetData()">Reset Data</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="ss-hdr">About</div>
+                    <div class="ss-body" style="font-size:13px;color:var(--text-sec);line-height:1.8"><strong>FinTrack
+                            v1.0</strong><br>Built with HTML, CSS, JavaScript & Chart.js<br>A complete expense tracker
+                        with authentication. <strong>All Right Reserved to &copy;ANKITA SANJAY.</strong></div>
+                </div>
+            </section>
+
+            <!-- HELP -->
+            <section class="page" data-page="help">
+                <div class="help-section">
+                    <div class="hs-hdr">Quick Start</div>
+                    <div class="quick-start">
+                        <ol>
+                            <li>View the <strong>demo dashboard</strong> to explore all features</li>
+                            <li>Click <strong>Register</strong> to create your own account</li>
+                            <li><strong>Login</strong> with your email and password</li>
+                            <li>Click the <strong>+</strong> button to add your first transaction</li>
+                            <li>View your updated <strong>Dashboard</strong> — cards and charts update in real time</li>
+                            <li>Go to <strong>Budgets</strong> to set spending limits per category</li>
+                            <li>Create <strong>Goals</strong> to track savings targets</li>
+                            <li>All data is saved automatically in your browser</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="help-section">
+                    <div class="hs-hdr">Frequently Asked Questions</div>
+                    <div id="faqList"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <button class="fab" id="fabBtn" title="Add Transaction"><i class="fas fa-plus"></i></button>
+
+    <!-- TRANSACTION MODAL -->
+    <div class="modal-ov" id="txnModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <h2>Add Transaction</h2><button class="modal-x" onclick="closeModal('txnModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-bd">
+                <div class="type-toggle"><button class="type-btn ate" id="expBtn"
+                        onclick="setType('expense')">Expense</button><button class="type-btn" id="incBtn"
+                        onclick="setType('income')">Income</button></div>
+                <form onsubmit="return handleAddTxn(event)">
+                    <div class="fg"><label>Description</label><input class="fi" id="txnName"
+                            placeholder="e.g., Grocery shopping"></div>
+                    <div class="frow">
+                        <div class="fg"><label>Amount</label><input type="number" class="fi" id="txnAmt"
+                                placeholder="0.00" min="0.01" step="0.01"></div>
+                        <div class="fg"><label>Date</label><input type="date" class="fi" id="txnDate"></div>
+                    </div>
+                    <div class="fg" id="expCatGrp"><label>Category</label><select class="fs" id="txnCat">
+                            <option value="">Select category</option>
+                        </select></div>
+                    <div class="fg" id="incCatGrp" style="display:none"><label>Source</label><select class="fs"
+                            id="txnIncCat">
+                            <option value="">Select source</option>
+                        </select></div>
+                    <div class="fg"><label>Note (optional)</label><input class="fi" id="txnNote"
+                            placeholder="Add a note..."></div>
+                    <button type="submit" class="sub-btn">Add Transaction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOAL MODAL -->
+    <div class="modal-ov" id="goalModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <h2>Create Goal</h2><button class="modal-x" onclick="closeModal('goalModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-bd">
+                <form onsubmit="return handleCreateGoal(event)">
+                    <div class="fg"><label>Goal Name</label><input class="fi" id="goalName"
+                            placeholder="e.g., Vacation Fund"></div>
+                    <div class="fg"><label>Target Amount</label><input type="number" class="fi" id="goalTarget"
+                            placeholder="5000" min="1" step="0.01"></div>
+                    <div class="fg"><label>Color</label><select class="fs" id="goalColor">
+                            <option value="#06b6d4">Cyan</option>
+                            <option value="#10b981">Green</option>
+                            <option value="#8b5cf6">Purple</option>
+                            <option value="#f59e0b">Amber</option>
+                            <option value="#ec4899">Pink</option>
+                            <option value="#ef4444">Red</option>
+                            <option value="#3b82f6">Blue</option>
+                        </select></div>
+                    <button type="submit" class="sub-btn">Create Goal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FUNDS MODAL -->
+    <div class="modal-ov" id="fundsModal">
+        <div class="modal" style="width:380px">
+            <div class="modal-hdr">
+                <h2>Add Funds</h2><button class="modal-x" onclick="closeModal('fundsModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-bd">
+                <p style="font-size:13px;color:var(--text-sec);margin-bottom:16px" id="fundsGoalName"></p>
+                <form onsubmit="return handleAddFunds(event)">
+                    <input type="hidden" id="fundsGoalId">
+                    <div class="fg"><label>Amount to Add</label><input type="number" class="fi" id="fundsAmt"
+                            placeholder="100" min="0.01" step="0.01"></div>
+                    <button type="submit" class="sub-btn">Add Funds</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORY MODAL -->
+    <div class="modal-ov" id="catModal">
+        <div class="modal" style="width:400px">
+            <div class="modal-hdr">
+                <h2 id="catModalTitle">Add Category</h2><button class="modal-x" onclick="closeModal('catModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-bd">
+                <form onsubmit="return handleCreateCategory(event)">
+                    <input type="hidden" id="catTypeInput" value="expense">
+                    <div class="fg"><label>Name</label><input class="fi" id="catNameInput"
+                            placeholder="e.g., Subscriptions"></div>
+                    <div class="fg"><label>Color</label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="catColorPicker"></div>
+                    </div>
+                    <button type="submit" class="sub-btn">Add Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM DIALOG -->
+    <div class="modal-ov" id="confirmDialog">
+        <div class="modal" style="width:380px">
+            <div class="modal-hdr">
+                <h2 id="confirmTitle">Confirm</h2><button class="modal-x" onclick="closeModal('confirmDialog')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-bd">
+                <p id="confirmMessage" style="font-size:14px;color:var(--text-sec);margin-bottom:4px;line-height:1.6">
+                </p>
+                <div class="confirm-warning" id="confirmWarning" style="display:none"><i
+                        class="fas fa-exclamation-triangle"></i><span id="confirmWarningText"></span></div>
+                <div class="confirm-actions" style="margin-top:18px">
+                    <button class="confirm-cancel" onclick="closeModal('confirmDialog')">Cancel</button>
+                    <button class="confirm-delete" id="confirmActionBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-c" id="toastC"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
