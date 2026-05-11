@@ -24,7 +24,14 @@ Month-over-month percentage change indicators
 Monthly Overview visual chart
 By Category expense breakdown
 
-<img width="1361" height="651" alt="fintrack 1" src="https://github.com/user-attachments/assets/9422bb78-6ced-4554-bd99-6178e99095e9" />
+<img width="1366" height="639" alt="Fintrack main" src="https://github.com/user-attachments/assets/45686222-dd3f-4cb5-8083-2544f0368627" />
+
+
+
+
+
+
+
 
 
 
@@ -43,7 +50,8 @@ Top spending category & highest single expense highlighted
 Daily Spending Trend — interactive line chart
 Category Split — donut/pie chart for expense distribution
 
-<img width="1362" height="639" alt="fintrack 2 analytics " src="https://github.com/user-attachments/assets/ea65f369-723f-42f5-ad00-1a290cee6bbf" />
+<img width="1364" height="634" alt="Fintrack analytics" src="https://github.com/user-attachments/assets/24cb7677-91cd-411c-b812-5b35f8a7f44b" />
+
 
 
 FinTrack Categories
@@ -59,7 +67,8 @@ Pre-defined categories: Food & Dining, Transportation, Shopping, Entertainment, 
 Per-category amount & transaction count at a glance
 Add custom categories with the "+ Add Category" button
 
-<img width="1361" height="632" alt="fintrack category" src="https://github.com/user-attachments/assets/8ed7b05b-314b-4b51-8849-42150043352a" />
+<img width="1360" height="634" alt="Fintrack categories" src="https://github.com/user-attachments/assets/2ecf2da4-f15d-407c-9c92-3563fffa272b" />
+
 
 
 FinTrack Goals
@@ -78,7 +87,8 @@ Add Funds to any goal on the fly
 
 Delete goals when no longer needed
 
-<img width="1363" height="638" alt="fintrack goals" src="https://github.com/user-attachments/assets/358968aa-ed08-40cf-b614-3ca4c9b56112" />
+<img width="1365" height="634" alt="Fintrack goals" src="https://github.com/user-attachments/assets/6b30830e-9daa-4327-baeb-bcb56426a55a" />
+
 
 
 🔐 Auth System
@@ -215,8 +225,6 @@ Savings Rate	91.9%	📈 +2.4%
  Multi-currency support
  
  Budget limits with overspend alerts
- 
- Dark / Light theme toggle
  
  PWA support for offline access
 
